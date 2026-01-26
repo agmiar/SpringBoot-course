@@ -1,33 +1,30 @@
 package com.agmiar.myfancypdfinvoices.springboot.service;
 
+import com.agmiar.myfancypdfinvoices.springboot.dao.InvoiceDAO;
 import com.agmiar.myfancypdfinvoices.springboot.model.Invoice;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Component
+@Service
 public final class InvoiceService {
 
     private UserService userService;
-    private String cdnUrl;
-    private CopyOnWriteArrayList<Invoice> invoices;
+    private InvoiceDAO invoiceDAO;
+    private List<Invoice> invoices;
 
-    public InvoiceService(UserService userService, @Value("${cdn.url}") String cdnUrl) {
-
-        // lista thread-safe
-        this.invoices = new CopyOnWriteArrayList<>();
-
+    public InvoiceService(UserService userService, InvoiceDAO invoiceDAO) {
         this.userService = userService;
-        this.cdnUrl = cdnUrl;
+        this.invoiceDAO = invoiceDAO;
     }
 
     @PostConstruct
     public void init() {
         System.out.println("Fetching PDF Template from S3...");
         // TODO download from s3 and save locally
+        invoices = invoiceDAO.findAll();
     }
 
 
@@ -37,13 +34,13 @@ public final class InvoiceService {
 //        if (userService.findById(userId) == null){
 //            throw new IllegalStateException();
 //        }
-        Invoice invoice = new Invoice(userId, amount, cdnUrl);
+        var invoice = invoiceDAO.create(userId, amount);
         invoices.add(invoice);
         return invoice;
     }
 
     public List<Invoice> findAll() {
-        return invoices;
+        return invoiceDAO.findAll();
     }
 
     public List<Invoice> findByUserId(String userId) {

@@ -9,8 +9,8 @@ public final class Invoice implements JsonRenderable {
     private String invoiceId, userId, pdfUrl;
     private Integer amount;
 
-    public Invoice(String userId, Integer amount, String pdfUrl) {
-        this.invoiceId = UUID.randomUUID().toString();
+    public Invoice(String id, String userId, Integer amount, String pdfUrl) {
+        this.invoiceId = id;
         this.userId = userId;
         this.amount = amount;
         this.pdfUrl = pdfUrl;
