@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class RequestDTO {
     public record InvoiceDTO(
+            @NotBlank String pdfResource,
             @NotBlank String userId,
             @Min(10) @Max(50) Integer amount
     ){ }

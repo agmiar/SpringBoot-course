@@ -214,7 +214,7 @@ public final class FluidJson {
     }
 
     // convertir Collection a FluidJson
-    public static FluidJson convertCollectionToJson(Collection<? extends JsonRenderable> lista){
+    public static FluidJson convertCollectionToJson(Iterable<? extends JsonRenderable> lista){
         var json = FluidJson.rootArray();
         for (JsonRenderable obj : lista) {
             json.putObject(obj.toJson());

@@ -21,18 +21,19 @@ public final class InvoicesController {
         );
     }
 
-    @GetMapping("/invoices/{userId}")
-    public FluidJson findByUserId(
-            @PathVariable("userId") String userId) {
-        return FluidJson.convertCollectionToJson(
-                invoiceService.findByUserId(userId)
-        );
-    }
+//    @GetMapping("/invoices/{userId}")
+//    public FluidJson findByUserId(
+//            @PathVariable("userId") String userId) {
+//        return FluidJson.convertCollectionToJson(
+//                invoiceService.findByUserId(userId)
+//        );
+//    }
 
     @PostMapping("/invoice")
     public FluidJson create(
             @RequestBody RequestDTO.InvoiceDTO invoiceDTO) {
         return invoiceService.create(
+                invoiceDTO.pdfResource(),
                 invoiceDTO.userId(),
                 invoiceDTO.amount()
         ).toJson();
