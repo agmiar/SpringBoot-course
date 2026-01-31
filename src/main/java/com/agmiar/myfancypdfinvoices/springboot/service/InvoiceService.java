@@ -3,6 +3,10 @@ package com.agmiar.myfancypdfinvoices.springboot.service;
 import com.agmiar.myfancypdfinvoices.springboot.model.Invoice;
 import com.agmiar.myfancypdfinvoices.springboot.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -48,5 +52,15 @@ public final class InvoiceService {
 //        }
 //        return invoicesByUser;
 //    }
+
+    // implementación de Pageable
+    public Page<Invoice> getPaginatedInvoices(
+            String userId, int page, int size, String sortBy){
+        Pageable p = PageRequest.of(page, size, Sort.by(sortBy));
+        if (userId != null) {
+            return invoiceRepository.findByUserId(userId, p);
+        }
+        return invoiceRepository.findAll(p);
+    }
 
 }

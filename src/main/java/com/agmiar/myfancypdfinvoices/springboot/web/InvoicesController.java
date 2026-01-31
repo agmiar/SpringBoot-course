@@ -14,20 +14,19 @@ public final class InvoicesController {
         this.invoiceService = invoiceService;
     }
 
+    // implementación con Pageable
     @GetMapping("/invoices")
-    public FluidJson findAll() {
-        return FluidJson.convertCollectionToJson(
-                invoiceService.findAll()
+    public FluidJson getUsers(
+            @RequestParam(required = false) String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ){
+        var pageableInvoices = invoiceService.getPaginatedInvoices(
+                userId,page, size, sortBy
         );
+        return FluidJson.convertPageToJson(pageableInvoices);
     }
-
-//    @GetMapping("/invoices/{userId}")
-//    public FluidJson findByUserId(
-//            @PathVariable("userId") String userId) {
-//        return FluidJson.convertCollectionToJson(
-//                invoiceService.findByUserId(userId)
-//        );
-//    }
 
     @PostMapping("/invoice")
     public FluidJson create(
@@ -38,4 +37,19 @@ public final class InvoicesController {
                 invoiceDTO.amount()
         ).toJson();
     }
+
+    //    @GetMapping("/invoices")
+//    public FluidJson findAll() {
+//        return FluidJson.convertCollectionToJson(
+//                invoiceService.findAll()
+//        );
+//    }
+
+    //    @GetMapping("/invoices/{userId}")
+//    public FluidJson findByUserId(
+//            @PathVariable("userId") String userId) {
+//        return FluidJson.convertCollectionToJson(
+//                invoiceService.findByUserId(userId)
+//        );
+//    }
 }

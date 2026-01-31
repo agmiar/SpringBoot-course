@@ -5,7 +5,7 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.ArrayNode;
-import java.util.Collection;
+import org.springframework.data.domain.Page;
 
 public final class FluidJson {
     private static ObjectMapper mapper;
@@ -219,6 +219,33 @@ public final class FluidJson {
         for (JsonRenderable obj : lista) {
             json.putObject(obj.toJson());
         }
+        return json;
+    }
+
+    /**
+     * Convertir un Page de objetos JsonRenderable a FluidJson
+     * Se mantiene la metadata de paginación de Spring
+     */
+    public static FluidJson convertPageToJson(Page<? extends JsonRenderable> page) {
+        var json = FluidJson.rootObject();
+
+        // Array con el contenido
+        var contentArray = json.array("content");
+        for (JsonRenderable obj : page.getContent()) {
+            contentArray.putObject(obj.toJson());
+        }
+
+        // Metadata de paginación
+        json.build()
+                .put("totalElements", (int) page.getTotalElements())
+                .put("totalPages", page.getTotalPages())
+                .put("size", page.getSize())
+                .put("number", page.getNumber())
+                .put("numberOfElements", page.getNumberOfElements())
+                .put("firstPage", page.isFirst())
+                .put("lastPage", page.isLast())
+                .put("emptyPage", page.isEmpty());
+
         return json;
     }
 
