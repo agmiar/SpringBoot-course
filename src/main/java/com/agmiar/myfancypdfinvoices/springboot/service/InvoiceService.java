@@ -27,7 +27,6 @@ public final class InvoiceService {
 //    }
 
 
-
     public Invoice create(String pdfResource, String userId, Integer amount) {
 //        if (userService.findById(userId) == null){
 //            throw new IllegalStateException();
