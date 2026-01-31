@@ -4,24 +4,26 @@ import com.agmiar.myfancypdfinvoices.springboot.helper.FluidJson;
 import com.agmiar.myfancypdfinvoices.springboot.helper.JsonRenderable;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
-@Table(name = "INVOICES")
+@Table(name = "invoices")
 public final class Invoice implements JsonRenderable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    @Column(name = "PDF_URL")
+    private UUID id;
+    @Column(name = "pdf_url")
     private String pdfUrl;
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     private String userId;
-    @Column(name = "AMOUNT")
+    @Column(name = "amount")
     private Integer amount;
 
     // requerido por JPA
     protected Invoice() {}
 
-    public Invoice(String id, String pdfUrl, String userId, Integer amount) {
+    public Invoice(UUID id, String pdfUrl, String userId, Integer amount) {
         this.id = id;
         this.pdfUrl = pdfUrl;
         this.userId = userId;

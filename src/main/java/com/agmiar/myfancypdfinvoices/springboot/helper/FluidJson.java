@@ -7,6 +7,8 @@ import tools.jackson.databind.node.ObjectNode;
 import tools.jackson.databind.node.ArrayNode;
 import org.springframework.data.domain.Page;
 
+import java.util.UUID;
+
 public final class FluidJson {
     private static ObjectMapper mapper;
     private final JsonNode node;
@@ -81,6 +83,21 @@ public final class FluidJson {
     }
 
     /**
+     * @param key nombre de la propiedad
+     * @param value UUID de la propiedad
+     * @return Agrega un par clave-valor al objeto a crear
+     */
+    public FluidJson put(String key, UUID value) {
+        asegurarObjeto();
+        if (value == null) {
+            ((ObjectNode) node).putNull(key);
+        } else {
+            ((ObjectNode) node).put(key, value.toString());
+        }
+        return this;
+    }
+
+    /**
      * @param key nombre del campo que contiene al nuevo objeto JSON anidado
      * @return objeto JSON anidado -> e.j. {"key": {}}
      */
@@ -128,6 +145,19 @@ public final class FluidJson {
     public FluidJson value(boolean value) {
         asegurarArray();
         ((ArrayNode) node).add(value);
+        return this;
+    }
+
+    /**
+     * @return [uuid] -> e.j. ["550e8400-e29b-41d4-a716-446655440000"]
+     */
+    public FluidJson value(UUID value) {
+        asegurarArray();
+        if (value == null) {
+            ((ArrayNode) node).addNull();
+        } else {
+            ((ArrayNode) node).add(value.toString());
+        }
         return this;
     }
 
